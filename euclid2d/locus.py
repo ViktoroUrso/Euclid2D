@@ -1,12 +1,16 @@
+from math import sqrt
+# import decimal
+import .aksioma
+import .core
+
 '''
 Модуль EUCLID.locus
 (от locus of points = geometric location of points)
 - геометрическое место точек.
-- базовый модуль определяющий классы плоскости, точки,
+- базовый модуль определяющий классы точки и
 последовательности(множества) точек,
-'''
 
-''' Объекты “Мерность 0” '''
+Объекты “Мерность 0”: '''
 
 
 class Point(Euclid):
@@ -127,6 +131,60 @@ _y = None # Y-coordinate of point (Float)
         Parameters prec : int
         Returns point : Point
         '''
+# ==================== Classmetods of class Point===========================================
+    def distance_to(self, other):
+        ''' The Euclidian distance between self and other object'''
+		return sqrt((self.x-p.x)**2+(self.y-p.y)**2) # Определиться с привязкой точности вычисления и разрядности ответа к свойствам класса Plane
+        ''' Returns distance to other Euclid object : number.
+        Raises TypeError : if other is not recognized as a GeometricEntity or is a
+        GeometricEntity for which distance is not defined. '''
+
+
+    def rotate(self, angle, mes=0, pt=None):
+        '''
+        :param angle: measure of angle in mes
+        :param mes: if 0 - gradus, if 1 - radians
+        :param pt: Point object
+        :return: rotated Point object
+
+        :raises
+        TypeError:
+        ValueError:
+        '''
+        # TODO Make a body of method - Rotate angle radians counterclockwise about Point pt.
+
+    def scale(self, x=1, y=1, pt=None):
+        '''
+        :param self:
+        :param x:
+        :param y:
+        :param pt:
+        :return:
+
+        :raises
+        TypeError:
+        ValueError:
+
+        '''
+        '''Scale the coordinates of the Point by multiplying by x and y after subtracting pt – default is (0, 0) – and then adding pt back again (i.e. pt is the point of reference for the scaling).'''
+
+    def transform(self, matrix):
+        ''' 
+        :param self: 
+        :param matrix: 
+        :return: 
+        '''  # Is it neccesary?
+        ''' Return the point after applying the transformation described by the 3x3 Matrix, matrix.'''
+
+
+    def translate(self, x=0, y=0):
+        '''
+        :param self:
+        :param x:
+        :param y:
+        :return:
+        '''
+        ''' Shift the Point by adding x and y to the coordinates of the Point.'''
 
 '''
 p[i] -> returns cartesian(i).Precondition: 0 <= i <= 1.
@@ -216,8 +274,11 @@ The Taxicab Distance from self to point p.
 Returns the sum of the horizontal and vertical distances to point p.
 Parameters p : Point
 Returns taxicab_distance : The sum of the horizontal and vertical distances to point p.
+'''
 
-
-class PointSet (Euclid)
-    # Класс для хранения информации о группе точек, в том числе для использования в качестве хранилища координат верших сложных объектов
-    Points = {} # словарь хранит информацию об объектах типа точка, в качестве ключа используются символы английского алфавита (в порядке алфавитной последовательности)
+class PointSet (EuclidSet):
+    # Класс для хранения информации о группе точек, в том числе для использования
+    # в качестве хранилища координат верших сложных объектов
+    Points = {} 
+    # словарь хранит информацию об объектах типа точка, 
+    # в качестве ключа используются символы английского алфавита (в порядке алфавитной последовательности)
