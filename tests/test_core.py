@@ -1,24 +1,64 @@
 import pytest
-from euclid2D.core import Plane
-
+from euclid2D.core import Plane, Coords
+from euclid2D.aksioma import ROUND_MASK
 
 class TestPlaneClass:
     """Test class Plane features."""
+
+    # Тестирование режимов округления
     def test_roundcoords_none(self):
         """Check round mask - ZERO."""
-        X_CONST = 5.5
-        Y_CONST = 1.1
-        cartesian = Plane()
-        x, y = cartesian.round_coords((X_CONST, Y_CONST))
-        assert X_CONST == pytest.approx(x) and Y_CONST == pytest.approx(y), (
-            'Проверьте, корректность работы режима без округления')
 
+        cartesian = Plane()
+        point_temp = Coords()
+        point_temp = cartesian.round_coords(Coords(5.5, 1.1))
+        assert (5.5 == pytest.approx(point_temp.x)
+                and 1.1 == pytest.approx(point_temp.y)), (
+                    'Проверьте, корректность работы режима без округления')
+
+    def test_roundcoords_math(self):
         """Check round mask - MATH"""
+
+        cartesian = Plane()
+        point_temp = Coords()
+        cartesian.round = ROUND_MASK["MATH"]
+        point_temp = cartesian.round_coords(Coords(5.5, 1.1))
+        assert (6 == point_temp.x) and (1 == point_temp.y), (
+            'Проверьте, корректность работы режима математического округления')
+
+    def test_roundcoords_max(self):
         """Check round mask - MAX"""
+
+        cartesian = Plane()
+        point_temp = Coords()
+        cartesian.round = ROUND_MASK["MAX"]
+        point_temp = cartesian.round_coords(Coords(5.5, 1.1))
+        assert (6 == point_temp.x) and (2 == point_temp.y), (
+            'Проверьте, корректность работы режима округления к большему целому')
+
+    def test_roundcoords_min(self):
         """Check round mask - MIN"""
 
+        cartesian = Plane()
+        point_temp = Coords()
+        cartesian.round = ROUND_MASK["MIN"]
+        point_temp = cartesian.round_coords(Coords(5.5, 1.1))
+        assert (5 == point_temp.x) and (1 == point_temp.y), (
+            'Проверьте, корректность работы режима округления к меньшему целому')
 
-# тест работы с границами плоскости
+    def test_roundcoords_round(self):
+        """Check round mask - ROUND"""
+
+        cartesian = Plane()
+        point_temp = Coords()
+        cartesian.round = ROUND_MASK["ROUND"]
+        point_temp = cartesian.round_coords(Coords(5.5, 1.1))
+        assert (6 == point_temp.x) and (1 == point_temp.y), (
+            'Проверьте, корректность работы режима стандартного округления')
+
+# тест проверки координат на выход за границы плоскости
+
+    def test_iscoordsvalid_
 
 #  тест работы с закрытостью/открытостью плоскости
 

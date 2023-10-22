@@ -1,4 +1,5 @@
 """Core module for Euclid basic class"""
+import math
 from abc import ABC, abstractmethod
 from .aksioma import ROUND_MASK
 
@@ -99,7 +100,26 @@ class EuclidCollection():
 
 
 class Coords():
-    pass
+
+    def __init__(self, x=0, y=0):
+        self._x = x
+        self._y = y
+
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, value):
+        self._x = value
+
+    @property
+    def y(self):
+        return self._y
+
+    @y.setter
+    def y(self, value):
+        self._y = value
 
 
 class Plane:
@@ -111,13 +131,13 @@ class Plane:
     # ==================== Fields of class Plane=============================
 
     name = "Euclid's plane"
-    coord_system = {
-        "metric": '',  # метрика плоскости
-        "x_lim": None,  # предел плоскости по оси Ox
-        "y_lim": None,  # предел плоскости по оси Oy
-        "round": ROUND_MASK["ZERO"],
-        "openess": True
-    }
+    metric = ''  # метрика плоскости
+    x_max_lim = None  # предел плоскости по оси Ox
+    x_min_lim = None
+    y_max_lim = None  # предел плоскости по оси Oy
+    y_min_lim = None
+    round = ROUND_MASK["ZERO"]
+    openess = False  # открытость/закрытость плоскости
     objects = []  # список/словарь(?) объектов на этой плоскости (EuclidSet?)
 
     # ==================== Properties of class Plane=========================
@@ -126,8 +146,38 @@ class Plane:
 
     # ==================== Classmetods of class Plane========================
     def round_coords(self, coords):
-        if self.coord_system["round"] == ROUND_MASK["ZERO"]:
+        def ar_round(value):
+            '''function for arithmetic rounding.'''
+            value = int(value + (0.5 if value > 0 else -0.5))
+            return value
+
+        if self.round == ROUND_MASK["ZERO"]:
+            return coords
+        elif self.round == ROUND_MASK["MATH"]:
+            coords.x = ar_round(coords.x)
+            coords.y = ar_round(coords.y)
+            return coords
+        elif self.round == ROUND_MASK["MAX"]:
+            coords.x = math.ceil(coords.x)
+            coords.y = math.ceil(coords.y)
+            return coords
+        elif self.round == ROUND_MASK["MIN"]:
+            coords.x = math.floor(coords.x)
+            coords.y = math.floor(coords.y)
+            return coords
+        elif self.round == ROUND_MASK["ROUND"]:
+            coords.x = round(coords.x, None)
+            coords.y = round(coords.y, None)
             return coords
 
     def is_coords_valid(self, coords):
-        pass
+        flag = True
+        if (not self.x_max_lim) and (self.x_max_lim < coords.x):
+            flag = False
+        if (not self.x_min_lim) and (self.x_min_lim > coords.x):
+            flag = False
+        if (not self.y_max_lim) and (self.y_max_lim < coords.y):
+            flag = False
+        if (not self.y_min_lim) and (self.y_min_lim > coords.y):
+            flag = False
+        return flag
