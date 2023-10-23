@@ -11,9 +11,9 @@ class TransformMask:
     trans_x = 0
     trans_y = 0
 
-    def __init__(self, x, y):
-        self.trans_x = x
-        self.trans_y = y
+    def __init__(self, delta_x, delta_y):
+        self.trans_x = delta_x
+        self.trans_y = delta_y
 
     @property
     def x(self):
@@ -130,22 +130,36 @@ class Plane:
 
     # ==================== Fields of class Plane=============================
 
-    name = "Euclid's plane"
-    metric = ''  # метрика плоскости
-    x_max_lim = None  # предел плоскости по оси Ox
-    x_min_lim = None
-    y_max_lim = None  # предел плоскости по оси Oy
-    y_min_lim = None
-    round = ROUND_MASK["ZERO"]
-    openess = False  # открытость/закрытость плоскости
-    objects = []  # список/словарь(?) объектов на этой плоскости (EuclidSet?)
 
     # ==================== Properties of class Plane=========================
 
     # ==================== Magic metods of class Plane=======================
+    def __init__(self, x_max_lim = None, x_min_lim = None, 
+                 y_max_lim = None, y_min_lim = None, openess = False):
+        """Plane's constructor method."""
+        self.name = "Euclid's plane"
+        self.metric = ''  # метрика плоскости
+        self.openess = openess
+        self.round = ROUND_MASK["ZERO"]
+        self.objects = []  # список/словарь(?) объектов на этой плоскости (EuclidSet?)
+
+        if ((x_max_lim >= 0 or x_max_lim is None) and
+            (x_min_lim <= 0 or x_min_lim is None)):
+            self.x_max_lim = x_max_lim
+            self.x_min_lim = x_min_lim
+        else:
+            raise IndexError("Try to setup incorrect plane's limits for x-axis")
+
+        if ((y_max_lim >= 0 or y_max_lim is None) and
+            (y_min_lim <= 0 or y_min_lim is None)):
+            self.y_max_lim = y_max_lim
+            self.y_min_lim = y_min_lim
+        else:
+            raise IndexError("Try to setup incorrect plane's limits for y-axis")
 
     # ==================== Classmetods of class Plane========================
     def round_coords(self, coords):
+        """Function for round coordinates."""
         def ar_round(value):
             '''function for arithmetic rounding.'''
             value = int(value + (0.5 if value > 0 else -0.5))
@@ -172,12 +186,12 @@ class Plane:
 
     def is_coords_valid(self, coords):
         flag = True
-        if (not self.x_max_lim) and (self.x_max_lim < coords.x):
+        if self.x_max_lim and self.x_max_lim < coords.x:
             flag = False
-        if (not self.x_min_lim) and (self.x_min_lim > coords.x):
+        if self.x_min_lim and self.x_min_lim > coords.x:
             flag = False
-        if (not self.y_max_lim) and (self.y_max_lim < coords.y):
+        if self.y_max_lim and self.y_max_lim < coords.y:
             flag = False
-        if (not self.y_min_lim) and (self.y_min_lim > coords.y):
+        if self.y_min_lim and self.y_min_lim > coords.y:
             flag = False
         return flag

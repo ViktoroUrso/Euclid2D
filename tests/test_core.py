@@ -58,7 +58,19 @@ class TestPlaneClass:
 
 # тест проверки координат на выход за границы плоскости
 
-    def test_iscoordsvalid_
+    def test_iscoordsvalid_beyondlimits(self):
+        """Checks if correct - checking coords in plane """
+
+        cartesian = Plane()
+        cartesian.round = ROUND_MASK["MATH"]
+        cartesian.x_max_lim = 10
+        cartesian.x_min_lim= -10
+        cartesian.y_max_lim = 10
+        cartesian.y_min_lim = -10
+
+        point_temp = Coords(11, 11)
+        point_temp = cartesian.round_coords(point_temp)
+        assert not(cartesian.is_coords_valid(point_temp))
 
 #  тест работы с закрытостью/открытостью плоскости
 
