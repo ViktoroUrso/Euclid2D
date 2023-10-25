@@ -100,7 +100,7 @@ class EuclidCollection():
 
 
 class Coords():
-
+    """Class for coordinations."""
     def __init__(self, x=0, y=0):
         self._x = x
         self._y = y
@@ -123,39 +123,47 @@ class Coords():
 
 
 class Plane:
-    '''2-dimensional Euclidean space'''
+    '''2-dimensional Euclidean space class'''
     ''' Класс хранит информацию о плоскости'''
     ''' the two-dimensional Euclidean plane ExE.
     Хранит размеры плоскости или информацию об их бесконечности'''
 
     # ==================== Fields of class Plane=============================
 
-
     # ==================== Properties of class Plane=========================
 
     # ==================== Magic metods of class Plane=======================
-    def __init__(self, x_max_lim = None, x_min_lim = None, 
-                 y_max_lim = None, y_min_lim = None, openess = False):
+    def __init__(self, x_max_lim=None, x_min_lim=None,
+                 y_max_lim=None, y_min_lim=None, openess=False):
         """Plane's constructor method."""
         self.name = "Euclid's plane"
         self.metric = ''  # метрика плоскости
         self.openess = openess
         self.round = ROUND_MASK["ZERO"]
-        self.objects = []  # список/словарь(?) объектов на этой плоскости (EuclidSet?)
+        self.objects = []  # список/словарь(?) объектов на этой плоскости
 
-        if ((x_max_lim >= 0 or x_max_lim is None) and
-            (x_min_lim <= 0 or x_min_lim is None)):
+        '''
+        if (self.x_min_lim and self.x_max_lim) and
+            (self.x_max_lim < self.x_min_lim
+             ^ self.y_max_lim < self.y_min_lim):
+            raise IndexError("Try to setup permutation limits")
+        '''
+
+        if ((x_max_lim is None or x_max_lim >= 0) and
+            (x_min_lim is None or x_min_lim <= 0)):
             self.x_max_lim = x_max_lim
             self.x_min_lim = x_min_lim
         else:
-            raise IndexError("Try to setup incorrect plane's limits for x-axis")
+            raise IndexError("Try to setup incorrect"
+                             "plane's limits for x-axis")
 
-        if ((y_max_lim >= 0 or y_max_lim is None) and
-            (y_min_lim <= 0 or y_min_lim is None)):
+        if ((y_max_lim is None or y_max_lim >= 0) and
+            (y_min_lim is None or y_min_lim <= 0)):
             self.y_max_lim = y_max_lim
             self.y_min_lim = y_min_lim
         else:
-            raise IndexError("Try to setup incorrect plane's limits for y-axis")
+            raise IndexError("Try to setup incorrect"
+                             "plane's limits for y-axis")
 
     # ==================== Classmetods of class Plane========================
     def round_coords(self, coords):
