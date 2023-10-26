@@ -1,7 +1,7 @@
 """Core module for Euclid basic class"""
 import math
 from abc import ABC, abstractmethod
-from .aksioma import ROUND_MASK
+from .aksioma import ROUND_MASK, EUCLID_OBJECT_TYPE, plane_list
 
 
 class TransformMask:
@@ -38,6 +38,7 @@ class Euclid(ABC):
     # ==================== Fields of class Euclid======================
     _id = None
     _name = "Euclid's object"
+    _euclid_type = EUCLID_OBJECT_TYPE["NONE"]
 
     # ==================== Properties of class Euclid==================
     @property
@@ -54,14 +55,8 @@ class Euclid(ABC):
 
     @property
     def affine_rank(self, *args):
-        ''' The affine rank of a set of points is
-        the dimension of the smallest affine space
-        containing all the points. For example,
-        if the points lie on a line (and are not
-        all the same - affine rank = 0) their affine
-        rank is 1. If the points lie on a plane but
-        not a line, their affine rank is 2. By convention,
-        the empty set has affine rank -1.'''
+        ''' The affine rank of a set of points''' 
+
     # ==================== Magic metods of class Euclid================
     def __init__(self, plane, *kwargs, **args):
 
@@ -123,31 +118,53 @@ class Coords():
 
 
 class Plane:
-    '''2-dimensional Euclidean space class'''
-    ''' Класс хранит информацию о плоскости'''
-    ''' the two-dimensional Euclidean plane ExE.
-    Хранит размеры плоскости или информацию об их бесконечности'''
+    '''Euclidean plane (ExE) class'''
 
     # ==================== Fields of class Plane=============================
+    _id = None # N плоскости 
+    _name = "Euclid's plane"
+    _objects = []  # список/словарь(?) объектов на этой плоскости
+    _metric = None  # размерность плоскости: 1-прямая (Х), 2-плоскость (Х*У)
 
     # ==================== Properties of class Plane=========================
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def name(self):
+        """Show name of a plane"""
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        """Set a name of a plane."""
+        self._name = name
+
+    @property
+    def metric(self):
+        """Show a metric level of plane: None-None, 1-Line, 2-Plane."""
+        return self._metric
+
+    @property
+    def openess(self):
+        """Show ability to Mebius's transbordering"""
+        return self._openess
+
+    @property
+    def round(self):
+        """Show roundness type."""
+        return self._round
 
     # ==================== Magic metods of class Plane=======================
     def __init__(self, x_max_lim=None, x_min_lim=None,
-                 y_max_lim=None, y_min_lim=None, openess=False):
+                 y_max_lim=None, y_min_lim=None, openess=False, metric='2'):
         """Plane's constructor method."""
-        self.name = "Euclid's plane"
-        self.metric = ''  # метрика плоскости
-        self.openess = openess
-        self.round = ROUND_MASK["ZERO"]
-        self.objects = []  # список/словарь(?) объектов на этой плоскости
-
-        '''
-        if (self.x_min_lim and self.x_max_lim) and
-            (self.x_max_lim < self.x_min_lim
-             ^ self.y_max_lim < self.y_min_lim):
-            raise IndexError("Try to setup permutation limits")
-        '''
+        self._id = len(plain_list)+1
+        plane_list[self._id]=self
+        self._metric = metric
+        self._openess = openess
+        self._round = ROUND_MASK["ZERO"]
 
         if ((x_max_lim is None or x_max_lim >= 0) and
             (x_min_lim is None or x_min_lim <= 0)):
@@ -164,6 +181,67 @@ class Plane:
         else:
             raise IndexError("Try to setup incorrect"
                              "plane's limits for y-axis")
+
+    #========== Numeric magic methods
+
+    # __trunc__(self): Implements behavior for math.trunc()
+    # __ceil__(self): Implements behavior for math.ceil()
+    # __floor__(self): Implements behavior for math.floor()
+    # __round__(self,n): Implements behavior for the built-in round()
+    # __invert__(self): Implements behavior for inversion using the ~ operator.
+    # __abs__(self): Implements behavior for the built-in abs()
+    # __neg__(self): Implements behavior for negation
+    # __pos__(self): Implements behavior for unary positive 
+
+    #========== Arithmetic operators
+    # __add__(self, other): Implements behavior for math.trunc()
+    def __add__(str, obj):
+        """Add Euclid obj to plane."""
+        self._objects[].append(obj)
+ 
+    # __sub__(self, other): Implements behavior for math.ceil()
+    def __sub__(str, obj_id):
+        """Delete Euclid obj with id from plane."""
+
+
+    # __mul__(self, other): Implements behavior for math.floor()
+    # __floordiv__(self, other): Implements behavior for the built-in round()
+    # __div__(self, other): Implements behavior for inversion using the ~ operator.
+    # __truediv__(self, other): Implements behavior for the built-in abs()
+    # __mod__(self, other): Implements behavior for negation
+    # __divmod__(self, other): Implements behavior for unary positive 
+    # __pow__: Implements behavior for exponents using the ** operator.
+    # __lshift__(self, other): Implements left bitwise shift using the << operator.
+    # __rshift__(self, other): Implements right bitwise shift using the >> operator.
+    # __and__(self, other): Implements bitwise and using the & operator.
+    # __or__(self, other): Implements bitwise or using the | operator.
+    # __xor__(self, other): Implements bitwise xor using the ^ operator.
+
+    #========== String Magic Methods
+
+    # __str__(self): Defines behavior for when str() is called on an instance of your class.
+    # __repr__(self): To get called by built-int repr() method to return a machine readable representation of a type.
+    # __unicode__(self): This method to return an unicode string of a type.
+    # __format__(self, formatstr): return a new style of string.
+    # __hash__(self): It has to return an integer, and its result is used for quick key comparison in dictionaries.
+    # __nonzero__(self): Defines behavior for when bool() is called on an instance of your class. 
+    # __dir__(self): This method to return a list of attributes of a class.
+    # __sizeof__(self): It return the size of the object.
+
+    #========== Comparison magic methods
+    # __eq__(self, other): Defines behavior for the equality operator, ==.
+    # __ne__(self, other): Defines behavior for the inequality operator, !=.
+    # __lt__(self, other): Defines behavior for the less-than operator, <.
+    # __gt__(self, other): Defines behavior for the greater-than operator, >.
+    # __le__(self, other): Defines behavior for the less-than-or-equal-to operator, <=.
+    # __ge__(self, other): Defines behavior for the greater-than-or-equal-to operator, >=.
+
+    def __str__(self):
+        '''Return string representation of plane.'''
+        return self._name
+
+    def __repr__(self):
+        """Return representation of plane."""
 
     # ==================== Classmetods of class Plane========================
     def round_coords(self, coords):
