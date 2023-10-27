@@ -156,6 +156,12 @@ class Plane:
         """Show roundness type."""
         return self._round
 
+    @property
+    def quantity(self):
+        """Return an amount of objects on the plane"""
+        return len(self._objects)
+
+
     # ==================== Magic metods of class Plane=======================
     def __init__(self, x_max_lim=None, x_min_lim=None,
                  y_max_lim=None, y_min_lim=None, openess=False, metric='2'):
@@ -182,11 +188,15 @@ class Plane:
             raise IndexError("Try to setup incorrect"
                              "plane's limits for y-axis")
 
-    #========== Numeric magic methods
+    def __del__(self):
+        """Destructor of plane class"""
+        
+        
+        '''Нужно удалить плоскость из plane_list'''
+        super.__del__
 
-    # __trunc__(self): Implements behavior for math.trunc()
-    # __ceil__(self): Implements behavior for math.ceil()
-    # __floor__(self): Implements behavior for math.floor()
+
+    #========== Numeric magic methods
     # __round__(self,n): Implements behavior for the built-in round()
     # __invert__(self): Implements behavior for inversion using the ~ operator.
     # __abs__(self): Implements behavior for the built-in abs()
@@ -194,14 +204,16 @@ class Plane:
     # __pos__(self): Implements behavior for unary positive 
 
     #========== Arithmetic operators
-    # __add__(self, other): Implements behavior for math.trunc()
     def __add__(str, obj):
         """Add Euclid obj to plane."""
         self._objects[].append(obj)
+        return self
  
-    # __sub__(self, other): Implements behavior for math.ceil()
     def __sub__(str, obj_id):
         """Delete Euclid obj with id from plane."""
+        # Вставить удаление объекта с п
+        return self
+
 
 
     # __mul__(self, other): Implements behavior for math.floor()
@@ -217,17 +229,6 @@ class Plane:
     # __or__(self, other): Implements bitwise or using the | operator.
     # __xor__(self, other): Implements bitwise xor using the ^ operator.
 
-    #========== String Magic Methods
-
-    # __str__(self): Defines behavior for when str() is called on an instance of your class.
-    # __repr__(self): To get called by built-int repr() method to return a machine readable representation of a type.
-    # __unicode__(self): This method to return an unicode string of a type.
-    # __format__(self, formatstr): return a new style of string.
-    # __hash__(self): It has to return an integer, and its result is used for quick key comparison in dictionaries.
-    # __nonzero__(self): Defines behavior for when bool() is called on an instance of your class. 
-    # __dir__(self): This method to return a list of attributes of a class.
-    # __sizeof__(self): It return the size of the object.
-
     #========== Comparison magic methods
     # __eq__(self, other): Defines behavior for the equality operator, ==.
     # __ne__(self, other): Defines behavior for the inequality operator, !=.
@@ -236,12 +237,45 @@ class Plane:
     # __le__(self, other): Defines behavior for the less-than-or-equal-to operator, <=.
     # __ge__(self, other): Defines behavior for the greater-than-or-equal-to operator, >=.
 
+    #========== String Magic Methods
     def __str__(self):
         '''Return string representation of plane.'''
         return self._name
 
     def __repr__(self):
-        """Return representation of plane."""
+        """Return machine representation of plane."""
+        return (self.metric, self.x_max_lim, self.y_max_lim,
+                self.x_min_lim, self.y_min_lim, self.openess)
+
+    # __format__(self, formatstr): return a new style of string.
+    # __hash__(self): It has to return an integer, and its result is used for quick key comparison in dictionaries.
+    # __nonzero__(self): Defines behavior for when bool() is called on an instance of your class. 
+
+''' Magic methods of object class
+__class__'
+'__delattr__'
+'__dir__'
+'__doc__'
+'__eq__'
+'__format__'
+'__ge__'
+'__getattribute__'
+'__gt__'
+'__hash__'
+'__init__'
+'__init_subclass__'
+'__le__'
+'__lt__'
+'__ne__'
+'__new__'
+'__reduce__'
+'__reduce_ex__'
+'__repr__'
+'__setattr__'
+'__sizeof__'
+'__str__'
+'__subclasshook__'
+'''
 
     # ==================== Classmetods of class Plane========================
     def round_coords(self, coords):
