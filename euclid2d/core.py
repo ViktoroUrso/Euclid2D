@@ -1,6 +1,6 @@
 """Core module for Euclid basic class"""
 import math
-import typing as typo
+# import typing as typo
 from abc import ABC, abstractmethod
 from .aksioma import ROUND_MASK, EUCLID_OBJECT_TYPE
 
@@ -9,7 +9,7 @@ class TransformMask:
     """Класс для хранения информации о маске трансформации (два числа)
         которые предполагается применить к координатам точки/точек/фигур
     """
-    trans_x:typo.Int = 0
+    trans_x = 0
     trans_y = 0
 
     def __init__(self, delta_x, delta_y):
@@ -172,6 +172,11 @@ class Plane:
         """Show roundness type."""
         return self._round
 
+    @round.setter
+    def round(self, value):
+        """Set a name of a plane."""
+        self._round = value
+
     @property
     def quantity(self):
         """Return an amount of objects on the plane"""
@@ -187,16 +192,16 @@ class Plane:
         self._openess = openess
         self._round = ROUND_MASK["ZERO"]
 
-        if ((x_max_lim is None or x_max_lim >= 0) and
-            (x_min_lim is None or x_min_lim <= 0)):
+        if ((x_max_lim is None or x_max_lim >= 0)
+                and (x_min_lim is None or x_min_lim <= 0)):
             self.x_max_lim = x_max_lim
             self.x_min_lim = x_min_lim
         else:
             raise IndexError("Try to setup incorrect"
                              "plane's limits for x-axis")
 
-        if ((y_max_lim is None or y_max_lim >= 0) and
-            (y_min_lim is None or y_min_lim <= 0)):
+        if ((y_max_lim is None or y_max_lim >= 0)
+                and (y_min_lim is None or y_min_lim <= 0)):
             self.y_max_lim = y_max_lim
             self.y_min_lim = y_min_lim
         else:
@@ -222,8 +227,8 @@ class Plane:
     def __reduce__(self):
         pass
 
-    def __reduce_ex__(self):
-        pass
+    #  def __reduce_ex__(self):
+    #    pass
 
     def __subclasshook__(self):
         pass
@@ -325,13 +330,13 @@ class Plane3D:
                 self.n = args[0].copy()
                 self.k = args[1]
             else:
-                raise (AttributeError, '%r' % (args,))
+                raise AttributeError('%r' % (args,))
 
         else:
-            raise (AttributeError, '%r' % (args,))
+            raise AttributeError('%r' % (args,))
 
         if not self.n:
-            raise (AttributeError, 'Points on plane are colinear')
+            raise AttributeError('Points on plane are colinear')
 
     def __copy__(self):
         return self.__class__(self.n, self.k)

@@ -1,12 +1,3 @@
-import EUCLID.aksioma
-import EUCLID.collections
-import EUCLID.linear
-import EUCLID.collections
-import EUCLID.shapes
-import math
-
-
-
 '''
 Пример файла для тестирования корректной работы модулей библиотеки EUCLID
 
@@ -67,8 +58,10 @@ assert Point(0, 0).distance_to_point(Point(-20, -20))==math.sqrt(20**2+20**2)
 
 # --- Area of triangle
 assert triangle_area_at_points(Point(0, 0), Point(0, 0), Point(0, 0))==0
-assert round(triangle_area_at_points(Point(0, 0), Point(1, 1), Point(1, 0)), 2)==round(0.5, 2)
-assert round(triangle_area_at_points(Point(0, 0), Point(1, 2), Point(1, 0)), 2)==round(1, 2)
+assert round(triangle_area_at_points(Point(0, 0), Point(1, 1), Point(1, 0)),
+2)==round(0.5, 2)
+assert round(triangle_area_at_points(Point(0, 0), Point(1, 2), Point(1, 0)),
+2)==round(1, 2)
 
 # --- Point faces edge
 edge = (Point(0, 0), Point(1, 1))
@@ -341,5 +334,4 @@ assert round(r1.distance_to_rect(r2), 2)==10
 
 # ----------------------------------------------------------------------
 print("No errors")
-
 '''
