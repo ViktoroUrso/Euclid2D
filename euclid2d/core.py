@@ -1,14 +1,15 @@
 """Core module for Euclid basic class"""
 import math
+import typing as typo
 from abc import ABC, abstractmethod
-from .aksioma import ROUND_MASK, EUCLID_OBJECT_TYPE, plane_list
+from .aksioma import ROUND_MASK, EUCLID_OBJECT_TYPE
 
 
 class TransformMask:
     """Класс для хранения информации о маске трансформации (два числа)
         которые предполагается применить к координатам точки/точек/фигур
     """
-    trans_x = 0
+    trans_x:typo.Int = 0
     trans_y = 0
 
     def __init__(self, delta_x, delta_y):
@@ -55,18 +56,33 @@ class Euclid(ABC):
 
     @property
     def affine_rank(self, *args):
-        ''' The affine rank of a set of points''' 
+        '''The affine rank of a set of points.'''
 
     # ==================== Magic metods of class Euclid================
     def __init__(self, plane, *kwargs, **args):
-
+        ''''''
         if plane is Plane:
-            plane.objects.append(self)
+            plane = plane + self
         else:
             raise TypeError("параметр plane должен быть объектом класса Plane")
 
     def __str__(self):
         return self._name
+
+    # ========== Comparison magic methods
+    # __eq__(self, other): Defines behavior for the equality operator, ==.
+    # __ne__(self, other): Defines behavior for the inequality operator, !=.
+    # __lt__(self, other): Defines behavior for the less-than operator, <.
+    # __gt__(self, other): Defines behavior for the greater-than operator, >.
+    # __le__(self, other): Defines behavior for the operator <=.
+    # __ge__(self, other): Defines behavior for the operator >=.
+
+    # ========== Numeric magic methods
+    # __round__(self,n): Implements behavior for the built-in round()
+    # __invert__(self): Implements behavior for inversion using the ~ operator.
+    # __abs__(self): Implements behavior for the built-in abs()
+    # __neg__(self): Implements behavior for negation
+    # __pos__(self): Implements behavior for unary positive
 
     # ==================== Classmetods of class Euclid=======================
     @abstractmethod
@@ -119,11 +135,11 @@ class Coords():
 
 class Plane:
     '''Euclidean plane (ExE) class'''
-
+    plane_list = {}  # Ye;yj gthtytcnb d rkfcc
     # ==================== Fields of class Plane=============================
-    _id = None # N плоскости 
+    _id = None  # N плоскости
     _name = "Euclid's plane"
-    _objects = []  # список/словарь(?) объектов на этой плоскости
+    _objects = {}  # список/словарь(?) объектов на этой плоскости
     _metric = None  # размерность плоскости: 1-прямая (Х), 2-плоскость (Х*У)
 
     # ==================== Properties of class Plane=========================
@@ -161,13 +177,12 @@ class Plane:
         """Return an amount of objects on the plane"""
         return len(self._objects)
 
-
     # ==================== Magic metods of class Plane=======================
     def __init__(self, x_max_lim=None, x_min_lim=None,
                  y_max_lim=None, y_min_lim=None, openess=False, metric='2'):
         """Plane's constructor method."""
-        self._id = len(plain_list)+1
-        plane_list[self._id]=self
+        self._id = len(Plane.plane_list)+1
+        Plane.plane_list[self._id] = self
         self._metric = metric
         self._openess = openess
         self._round = ROUND_MASK["ZERO"]
@@ -190,92 +205,66 @@ class Plane:
 
     def __del__(self):
         """Destructor of plane class"""
-        
-        
-        '''Нужно удалить плоскость из plane_list'''
-        super.__del__
+        del Plane.plane_list[self.id]
 
+    def __class__(self):
+        pass
 
-    #========== Numeric magic methods
-    # __round__(self,n): Implements behavior for the built-in round()
-    # __invert__(self): Implements behavior for inversion using the ~ operator.
-    # __abs__(self): Implements behavior for the built-in abs()
-    # __neg__(self): Implements behavior for negation
-    # __pos__(self): Implements behavior for unary positive 
+    def __name__(self):
+        pass
 
-    #========== Arithmetic operators
-    def __add__(str, obj):
+    def __doc__(self):
+        pass
+
+    def __init_subclass__(self):
+        pass
+
+    def __reduce__(self):
+        pass
+
+    def __reduce_ex__(self):
+        pass
+
+    def __subclasshook__(self):
+        pass
+
+    # ========== Arithmetic operators
+    def __add__(self, obj):
         """Add Euclid obj to plane."""
-        self._objects[].append(obj)
+        self._objects[obj.id] = obj
         return self
- 
-    def __sub__(str, obj_id):
+
+    def __sub__(self, obj):
         """Delete Euclid obj with id from plane."""
-        # Вставить удаление объекта с п
+        # Вставить удаление объекта с плоскостью
+        del self._objects[obj.id]
         return self
 
-
-
-    # __mul__(self, other): Implements behavior for math.floor()
-    # __floordiv__(self, other): Implements behavior for the built-in round()
-    # __div__(self, other): Implements behavior for inversion using the ~ operator.
-    # __truediv__(self, other): Implements behavior for the built-in abs()
-    # __mod__(self, other): Implements behavior for negation
-    # __divmod__(self, other): Implements behavior for unary positive 
-    # __pow__: Implements behavior for exponents using the ** operator.
-    # __lshift__(self, other): Implements left bitwise shift using the << operator.
-    # __rshift__(self, other): Implements right bitwise shift using the >> operator.
-    # __and__(self, other): Implements bitwise and using the & operator.
-    # __or__(self, other): Implements bitwise or using the | operator.
-    # __xor__(self, other): Implements bitwise xor using the ^ operator.
-
-    #========== Comparison magic methods
-    # __eq__(self, other): Defines behavior for the equality operator, ==.
-    # __ne__(self, other): Defines behavior for the inequality operator, !=.
-    # __lt__(self, other): Defines behavior for the less-than operator, <.
-    # __gt__(self, other): Defines behavior for the greater-than operator, >.
-    # __le__(self, other): Defines behavior for the less-than-or-equal-to operator, <=.
-    # __ge__(self, other): Defines behavior for the greater-than-or-equal-to operator, >=.
-
-    #========== String Magic Methods
+    # ========== String Magic Methods
     def __str__(self):
         '''Return string representation of plane.'''
-        return self._name
+        # сформировать строковое представление
+        return "".join(self._name)
 
     def __repr__(self):
         """Return machine representation of plane."""
-        return (self.metric, self.x_max_lim, self.y_max_lim,
-                self.x_min_lim, self.y_min_lim, self.openess)
+        # сформировать строковое представление
+        return str(self.metric, self.x_max_lim, self.y_max_lim,
+                   self.x_min_lim, self.y_min_lim, self.openess)
 
-    # __format__(self, formatstr): return a new style of string.
-    # __hash__(self): It has to return an integer, and its result is used for quick key comparison in dictionaries.
-    # __nonzero__(self): Defines behavior for when bool() is called on an instance of your class. 
+    def __format__(self, formatstr):
+        """return a new style of string."""
+        return self.__str__()
 
-''' Magic methods of object class
-__class__'
-'__delattr__'
-'__dir__'
-'__doc__'
-'__eq__'
-'__format__'
-'__ge__'
-'__getattribute__'
-'__gt__'
-'__hash__'
-'__init__'
-'__init_subclass__'
-'__le__'
-'__lt__'
-'__ne__'
-'__new__'
-'__reduce__'
-'__reduce_ex__'
-'__repr__'
-'__setattr__'
-'__sizeof__'
-'__str__'
-'__subclasshook__'
-'''
+    def __hash__(self):
+        """It has to return an integer, and its result is
+        used for quick key comparison in dictionaries."""
+        return hash_int
+
+    def __nonzero__(self):
+        """Defines behavior for when bool()
+        is called on an instance of your class."""
+        return True
 
     # ==================== Classmetods of class Plane========================
     def round_coords(self, coords):
@@ -315,3 +304,73 @@ __class__'
         if self.y_min_lim and self.y_min_lim > coords.y:
             flag = False
         return flag
+
+
+class Plane3D:
+    # n.p = k, where n is normal, p is point on plane, k is constant scalar
+    __slots__ = ['n', 'k']
+
+    def __init__(self, *args):
+        if len(args) == 3:
+            assert isinstance(args[0], Point3) and \
+                   isinstance(args[1], Point3) and \
+                   isinstance(args[2], Point3)
+            self.n = (args[1] - args[0]).cross(args[2] - args[0])
+            self.k = self.n.dot(args[0])
+        elif len(args) == 2:
+            if isinstance(args[0], Point3) and isinstance(args[1], Vector3):
+                self.n = args[1].copy()
+                self.k = self.n.dot(args[0])
+            elif isinstance(args[0], Vector3) and type(args[1]) == float:
+                self.n = args[0].copy()
+                self.k = args[1]
+            else:
+                raise (AttributeError, '%r' % (args,))
+
+        else:
+            raise (AttributeError, '%r' % (args,))
+
+        if not self.n:
+            raise (AttributeError, 'Points on plane are colinear')
+
+    def __copy__(self):
+        return self.__class__(self.n, self.k)
+
+    copy = __copy__
+
+    def __repr__(self):
+        return 'Plane(<%.2f, %.2f, %.2f>.p = %.2f)' % \
+            (self.n.x, self.n.y, self.n.z, self.k)
+
+    def _get_point(self):
+        # Return an arbitrary point on the plane
+        if self.n.z:
+            return Point(0., self.k / self.n.z)
+        else:
+            return Point(self.k / self.n.x, 0.)
+
+    def _apply_transform(self, t):
+        p = t * self._get_point()
+        self.n = t * self.n
+        self.k = self.n.dot(p)
+
+    def intersect(self, other):
+        return other._intersect_plane(self)
+
+    def _intersect_line(self, other):
+        return _intersect_line_plane(other, self)
+
+    def _intersect_plane(self, other):
+        return _intersect_plane_plane(self, other)
+
+    def connect(self, other):
+        return other._connect_plane(self)
+
+    def _connect_point(self, other):
+        return _connect_point_plane(other, self)
+
+    def _connect_line(self, other):
+        return _connect_line_plane(other, self)
+
+    def _connect_plane(self, other):
+        return _connect_plane_plane(other, self)

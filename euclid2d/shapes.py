@@ -13,9 +13,28 @@ class Shape(Object)
     def __init__(self, *args):
         ''' Сделать создание объекта и проверку на неправильные значения переданных координат (если стороны объекта пересекаются - неправильные вершины объекта)'''
 
-    def square(self): # property of Shape object
-
+   from abc import ABC, abstractmethod
+ 
+class Shape(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+ 
+    @abstractmethod
+    def perimeter(self):
+        pass
     def bounds(self): # property Return a tuple? (xmin, ymin, xmax, ymax) representing the bounding rectangle for the geometric figure.
+
+class Rectangle(Shape):
+    def __init__(self, length, width):
+        self.length = length
+        self.width = width
+ 
+    def area(self):
+        return self.length * self.width
+ 
+    def perimeter(self):
+        return 2 * (self.length + self.width)
 
 '''
 Создайте класс Геометрическая фигура (динамические методы: вывод информации, площадь, периметр).
