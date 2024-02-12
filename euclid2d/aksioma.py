@@ -16,7 +16,7 @@ AFFINE_RANK = {
     "NONE": -1,  # Not defined. By convention,the empty set has affine rank -1.
     "0D": 0,  # If the points lie on a line and not all the same-affine rank=0
     "1D": 1,  # If the points lie on a line - their affine rank is 1
-    "2D": 2  # If the points lie on a plane but not a line, affine rank is 2
+    "2D": 2  # If the points lie on a plane, but not a line, affine rank is 2
 }
 
 EUCLID_OBJECT_TYPE = {

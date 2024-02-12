@@ -23,6 +23,12 @@ class Line(Linear):
         super().__init__()
 
 
+    def intersect(self, other):
+        return other._intersect_plane(self)
+
+
+
+
 ''' Нахождение пересечений'''
 '''
 class Line_2(Boost.Python.instance)

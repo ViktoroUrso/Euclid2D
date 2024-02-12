@@ -5,41 +5,15 @@ from abc import ABC, abstractmethod
 from .aksioma import ROUND_MASK, EUCLID_OBJECT_TYPE
 
 
-class TransformMask:
-    """Класс для хранения информации о маске трансформации (два числа)
-        которые предполагается применить к координатам точки/точек/фигур
-    """
-    trans_x = 0
-    trans_y = 0
-
-    def __init__(self, delta_x, delta_y):
-        self.trans_x = delta_x
-        self.trans_y = delta_y
-
-    @property
-    def x(self):
-        return self.trans_x
-
-    @property
-    def y(self):
-        return self.trans_y
-
-
 class Euclid(ABC):
+    ''' THe base abstract class of package for all geometrical entities. '''
     '''
-    Абстрактный базовый класс для генерации классов пакета
-    в качестве методов - 5 аффинных преобразований
-
-    The base class for all geometrical entities.
-    This class doesn’t represent any
-    particular geometric entity,
-    it only provides the implementation of some
-    methods common to all subclasses.
+        This class doesn’t represent any
+        particular geometric entity,
+       it only provides the implementation of some
+        methods common to all subclasses.
     '''
     # ==================== Fields of class Euclid======================
-    _id = None
-    _name = "Euclid's object"
-    _euclid_type = EUCLID_OBJECT_TYPE["NONE"]
 
     # ==================== Properties of class Euclid==================
     @property
@@ -48,19 +22,26 @@ class Euclid(ABC):
 
     @property
     def bbox(self):
-        ''' returns a bounding box containing p.
+        ''' 
+        returns a bounding box containing p.
         :param self:
         :return:
         Note that bounding boxes are not parameterized with whatsoever.
         '''
+        pass
 
     @property
     def affine_rank(self, *args):
         '''The affine rank of a set of points.'''
+        pass
 
     # ==================== Magic metods of class Euclid================
     def __init__(self, plane, *kwargs, **args):
-        ''''''
+        '''Constructor method.'''
+        _id = None
+        _name = "Euclid's object"
+        _euclid_type = EUCLID_OBJECT_TYPE["NONE"]
+
         if plane is Plane:
             plane = plane + self
         else:
@@ -87,27 +68,40 @@ class Euclid(ABC):
     # ==================== Classmetods of class Euclid=======================
     @abstractmethod
     def distance_to(self, obj):
-        pass
 
     @abstractmethod
     def rotate(self, angle, mes=0, pt=None):
-        pass
+
 
     @abstractmethod
     def scale(self, x=1, y=1, pt=None):
-        pass
 
     @abstractmethod
     def transform(self, matrix):
-        pass
 
     @abstractmethod
     def translate(self, x=0, y=0):
-        pass
 
 
 class EuclidCollection():
     """Class for set of Euclid objects"""
+
+
+class TransformMask:
+    """Класс для хранения информации о маске трансформации (два числа)
+        которые предполагается применить к координатам точки/точек/фигур
+    """
+    def __init__(self, delta_x, delta_y):
+        self._trans_x = delta_x
+        self._trans_y = delta_y
+
+    @property
+    def x(self):
+        return self._trans_x
+
+    @property
+    def y(self):
+        return self._trans_y
 
 
 class Coords():
@@ -135,9 +129,9 @@ class Coords():
 
 class Plane:
     '''Euclidean plane (ExE) class'''
-    plane_list = {}  # Ye;yj gthtytcnb d rkfcc
+    plane_list = {}  # Нужно перенести в класс
     # ==================== Fields of class Plane=============================
-    _id = None  # N плоскости
+    _id = None  # № плоскости
     _name = "Euclid's plane"
     _objects = {}  # список/словарь(?) объектов на этой плоскости
     _metric = None  # размерность плоскости: 1-прямая (Х), 2-плоскость (Х*У)
@@ -174,7 +168,7 @@ class Plane:
 
     @round.setter
     def round(self, value):
-        """Set a name of a plane."""
+        """Set a roundness type of plane."""
         self._round = value
 
     @property
@@ -215,9 +209,6 @@ class Plane:
     def __class__(self):
         pass
 
-    def __name__(self):
-        pass
-
     def __doc__(self):
         pass
 
@@ -226,9 +217,6 @@ class Plane:
 
     def __reduce__(self):
         pass
-
-    #  def __reduce_ex__(self):
-    #    pass
 
     def __subclasshook__(self):
         pass
@@ -241,7 +229,7 @@ class Plane:
 
     def __sub__(self, obj):
         """Delete Euclid obj with id from plane."""
-        # Вставить удаление объекта с плоскостью
+        # Вставить удаление объекта с плоскости
         del self._objects[obj.id]
         return self
 
@@ -250,15 +238,22 @@ class Plane:
         '''Return string representation of plane.'''
         # сформировать строковое представление
         return "".join(self._name)
+    
+    def __bytes__(self):
+        '''Return bytes representation of plane.'''
+        # сформировать строковое представление
+        return
 
     def __repr__(self):
         """Return machine representation of plane."""
-        # сформировать строковое представление
+        # сформировать ьашинно-ориентированное строковое представление
         return str(self.metric, self.x_max_lim, self.y_max_lim,
                    self.x_min_lim, self.y_min_lim, self.openess)
 
     def __format__(self, formatstr):
         """return a new style of string."""
+        # вызывается при вызове функции format(...) и используется 
+        # для форматировании строки с использованием строковых литералов.
         return self.__str__()
 
     def __hash__(self):
@@ -266,12 +261,12 @@ class Plane:
         used for quick key comparison in dictionaries."""
         return hash_int
 
-    def __nonzero__(self):
+    def __bool__(self):
         """Defines behavior for when bool()
         is called on an instance of your class."""
         return True
 
-    # ==================== Classmetods of class Plane========================
+    # ==================== Classmethods of class Plane========================
     def round_coords(self, coords):
         """Function for round coordinates."""
         def ar_round(value):
@@ -309,6 +304,15 @@ class Plane:
         if self.y_min_lim and self.y_min_lim > coords.y:
             flag = False
         return flag
+
+    def transform(self, another_plane):
+        """Transform plane to another plane"""
+        return
+    
+    def copy(self):
+        """Create new plane, transform and return"""
+        return plane_copy
+
 
 
 class Plane3D:
@@ -359,23 +363,5 @@ class Plane3D:
         self.n = t * self.n
         self.k = self.n.dot(p)
 
-    def intersect(self, other):
-        return other._intersect_plane(self)
-
-    def _intersect_line(self, other):
-        return _intersect_line_plane(other, self)
-
-    def _intersect_plane(self, other):
-        return _intersect_plane_plane(self, other)
-
     def connect(self, other):
         return other._connect_plane(self)
-
-    def _connect_point(self, other):
-        return _connect_point_plane(other, self)
-
-    def _connect_line(self, other):
-        return _connect_line_plane(other, self)
-
-    def _connect_plane(self, other):
-        return _connect_plane_plane(other, self)
