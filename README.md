@@ -14,7 +14,9 @@ with simple and full pythonic interface for developers.
 
 ---------
 
-It's better then Shapely, couse it's no need GEOS
-It's better then SIMPY Geometry, couse it hasn't simbolic ?equations?
+It will bebetter then Shapely, couse it's no need GEOS
+It will be better then SIMPY Geometry, couse it hasn't simbolic equations
+It will be beter then others (make libs list (with URLs) here)
 
-I'd like to make a simple tool with better feateres of this libs!
+
+I'd like to make a simple tool with better features of this libs!

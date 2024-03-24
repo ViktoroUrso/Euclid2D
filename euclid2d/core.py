@@ -1,19 +1,51 @@
 """Core module for Euclid basic class"""
+
 import math
-# import typing as typo
 from abc import ABC, abstractmethod
 from .aksioma import ROUND_MASK, EUCLID_OBJECT_TYPE
 
 
+class TransformMask:
+    """Class for store the transformation mask."""
+
+    def __init__(self, delta_x, delta_y):
+        self._trans_x = delta_x
+        self._trans_y = delta_y
+
+    @property
+    def x(self):
+        return self._trans_x
+
+    @property
+    def y(self):
+        return self._trans_y
+
+
+class Coords():
+    """Class for store the pair of coordinates."""
+    def __init__(self, x=0, y=0):
+        self._x = x
+        self._y = y
+
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, value):
+        self._x = value
+
+    @property
+    def y(self):
+        return self._y
+
+    @y.setter
+    def y(self, value):
+        self._y = value
+
+
 class Euclid(ABC):
-    ''' THe base abstract class of package for all geometrical entities. '''
-    '''
-        This class doesn’t represent any
-        particular geometric entity,
-       it only provides the implementation of some
-        methods common to all subclasses.
-    '''
-    # ==================== Fields of class Euclid======================
+    ''' THe base abstract class of package for all geometrical entities.'''
 
     # ==================== Properties of class Euclid==================
     @property
@@ -38,9 +70,9 @@ class Euclid(ABC):
     # ==================== Magic metods of class Euclid================
     def __init__(self, plane, *kwargs, **args):
         '''Constructor method.'''
-        _id = None
-        _name = "Euclid's object"
-        _euclid_type = EUCLID_OBJECT_TYPE["NONE"]
+        self._id = None
+        self._name = "Euclid's object"
+        self._euclid_type = EUCLID_OBJECT_TYPE["NONE"]
 
         if plane is Plane:
             plane = plane + self
@@ -50,85 +82,56 @@ class Euclid(ABC):
     def __str__(self):
         return self._name
 
-    # ========== Comparison magic methods
-    # __eq__(self, other): Defines behavior for the equality operator, ==.
-    # __ne__(self, other): Defines behavior for the inequality operator, !=.
-    # __lt__(self, other): Defines behavior for the less-than operator, <.
-    # __gt__(self, other): Defines behavior for the greater-than operator, >.
-    # __le__(self, other): Defines behavior for the operator <=.
-    # __ge__(self, other): Defines behavior for the operator >=.
-
-    # ========== Numeric magic methods
-    # __round__(self,n): Implements behavior for the built-in round()
-    # __invert__(self): Implements behavior for inversion using the ~ operator.
-    # __abs__(self): Implements behavior for the built-in abs()
-    # __neg__(self): Implements behavior for negation
-    # __pos__(self): Implements behavior for unary positive
-
     # ==================== Classmetods of class Euclid=======================
     @abstractmethod
     def distance_to(self, obj):
+        pass
 
     @abstractmethod
     def rotate(self, angle, mes=0, pt=None):
-
+        pass
 
     @abstractmethod
     def scale(self, x=1, y=1, pt=None):
+        pass
 
     @abstractmethod
     def transform(self, matrix):
+        pass
 
     @abstractmethod
     def translate(self, x=0, y=0):
+        pass
 
 
 class EuclidCollection():
     """Class for set of Euclid objects"""
 
+    # ==================== Classmetods of class Euclid=======================
+    @abstractmethod
+    def distance_to(self, obj):
+        pass
 
-class TransformMask:
-    """Класс для хранения информации о маске трансформации (два числа)
-        которые предполагается применить к координатам точки/точек/фигур
-    """
-    def __init__(self, delta_x, delta_y):
-        self._trans_x = delta_x
-        self._trans_y = delta_y
+    @abstractmethod
+    def rotate(self, angle, mes=0, pt=None):
+        pass
 
-    @property
-    def x(self):
-        return self._trans_x
+    @abstractmethod
+    def scale(self, x=1, y=1, pt=None):
+        pass
 
-    @property
-    def y(self):
-        return self._trans_y
+    @abstractmethod
+    def transform(self, matrix):
+        pass
 
+    @abstractmethod
+    def translate(self, x=0, y=0):
+        pass
 
-class Coords():
-    """Class for coordinations."""
-    def __init__(self, x=0, y=0):
-        self._x = x
-        self._y = y
-
-    @property
-    def x(self):
-        return self._x
-
-    @x.setter
-    def x(self, value):
-        self._x = value
-
-    @property
-    def y(self):
-        return self._y
-
-    @y.setter
-    def y(self, value):
-        self._y = value
 
 
 class Plane:
-    '''Euclidean plane (ExE) class'''
+    '''Euclidean planes (ExE) class'''
     plane_list = {}  # Нужно перенести в класс
     # ==================== Fields of class Plane=============================
     _id = None  # № плоскости
@@ -233,7 +236,7 @@ class Plane:
         del self._objects[obj.id]
         return self
 
-    # ========== String Magic Methods
+    # ========== Representation Magic Methods
     def __str__(self):
         '''Return string representation of plane.'''
         # сформировать строковое представление
@@ -241,13 +244,13 @@ class Plane:
     
     def __bytes__(self):
         '''Return bytes representation of plane.'''
-        # сформировать строковое представление
-        return
+        # сформировать строковое представление из данных объекта
+        return b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
 
     def __repr__(self):
         """Return machine representation of plane."""
-        # сформировать ьашинно-ориентированное строковое представление
-        return str(self.metric, self.x_max_lim, self.y_max_lim,
+        # сформировать машинно-ориентированное строковое представление
+        return str("Plane:", self.metric, self.x_max_lim, self.y_max_lim,
                    self.x_min_lim, self.y_min_lim, self.openess)
 
     def __format__(self, formatstr):
@@ -294,6 +297,7 @@ class Plane:
             return coords
 
     def is_coords_valid(self, coords):
+        """Check if coordinates is valid."""
         flag = True
         if self.x_max_lim and self.x_max_lim < coords.x:
             flag = False
@@ -305,6 +309,10 @@ class Plane:
             flag = False
         return flag
 
+    def connect(self, other):
+        """Connect other object to plane"""
+        return other._connect_plane(self)
+
     def transform(self, another_plane):
         """Transform plane to another plane"""
         return
@@ -312,56 +320,3 @@ class Plane:
     def copy(self):
         """Create new plane, transform and return"""
         return plane_copy
-
-
-
-class Plane3D:
-    # n.p = k, where n is normal, p is point on plane, k is constant scalar
-    __slots__ = ['n', 'k']
-
-    def __init__(self, *args):
-        if len(args) == 3:
-            assert isinstance(args[0], Point3) and \
-                   isinstance(args[1], Point3) and \
-                   isinstance(args[2], Point3)
-            self.n = (args[1] - args[0]).cross(args[2] - args[0])
-            self.k = self.n.dot(args[0])
-        elif len(args) == 2:
-            if isinstance(args[0], Point3) and isinstance(args[1], Vector3):
-                self.n = args[1].copy()
-                self.k = self.n.dot(args[0])
-            elif isinstance(args[0], Vector3) and type(args[1]) == float:
-                self.n = args[0].copy()
-                self.k = args[1]
-            else:
-                raise AttributeError('%r' % (args,))
-
-        else:
-            raise AttributeError('%r' % (args,))
-
-        if not self.n:
-            raise AttributeError('Points on plane are colinear')
-
-    def __copy__(self):
-        return self.__class__(self.n, self.k)
-
-    copy = __copy__
-
-    def __repr__(self):
-        return 'Plane(<%.2f, %.2f, %.2f>.p = %.2f)' % \
-            (self.n.x, self.n.y, self.n.z, self.k)
-
-    def _get_point(self):
-        # Return an arbitrary point on the plane
-        if self.n.z:
-            return Point(0., self.k / self.n.z)
-        else:
-            return Point(self.k / self.n.x, 0.)
-
-    def _apply_transform(self, t):
-        p = t * self._get_point()
-        self.n = t * self.n
-        self.k = self.n.dot(p)
-
-    def connect(self, other):
-        return other._connect_plane(self)
